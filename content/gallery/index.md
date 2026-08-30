@@ -32,17 +32,17 @@ photos:
     id: "IISc"
     caption: "IISc Main Building"
 
-  - file: "iisc-05.jpg
-    id: "Lotus"
-    caption: "IISc EE Garden"
+  # - file: "iisc-05.jpg
+  #   id: "IISc-garden"
+  #   caption: "IISc EE Garden"
     
-  - file: "google-06.jpg
-    id: "Google"
-    caption: "From Shikara:Google Bengaluru."
+  # - file: "google-06.jpg
+  #   id: "Google"
+  #   caption: "From Shikara:Google Bengaluru."
 
-  - file: "temple-07.jpg
-    id: "Bhog"
-    caption: "Bhog Nandishwara Temple."
+  # - file: "temple-07.jpg
+  #   id: "Bhog"
+  #   caption: "Bhog Nandishwara Temple."
 ---
 
 A collection of moments, places, and random things that seemed worth pointing a camera at.
