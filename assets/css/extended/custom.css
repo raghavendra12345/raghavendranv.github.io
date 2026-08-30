@@ -620,3 +620,119 @@ button:focus-visible,
 @media (prefers-reduced-motion: reduce) {
   .like svg { transition: none; }
 }
+
+/* -------------------------------------------------------------
+   PUBLICATIONS
+   ------------------------------------------------------------- */
+
+.pub-year {
+  font-size: 1.05rem !important;
+  margin-top: 2.4em !important;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--pat-verdigris);
+  color: var(--pat-muted);
+}
+
+.pub-list { list-style: none; margin: 1.4em 0 0; padding: 0; }
+
+.pub {
+  margin: 0 0 2.2em;
+  padding-left: 1.1em;
+  border-left: 2px solid var(--border);
+}
+
+.pub:hover { border-left-color: var(--pat-verdigris); }
+
+.pub-title {
+  font-family: "Newsreader", Georgia, serif !important;
+  font-size: 1.06rem !important;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 0 0 0.3em !important;
+  color: var(--primary) !important;
+  letter-spacing: 0 !important;
+}
+
+.pub-authors {
+  margin: 0 0 0.3em;
+  font-size: 0.92rem;
+  color: var(--pat-muted);
+}
+
+/* The author's own name, set in brass so a reader finds it instantly
+   in a long author list. */
+.pub-me {
+  color: var(--pat-brass);
+  font-weight: 600;
+}
+
+.pub-venue {
+  margin: 0 0 0.5em;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6em;
+}
+
+.pub-venue-name {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  color: var(--pat-verdigris);
+  letter-spacing: 0.02em;
+}
+
+.pub-status {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.18em 0.5em;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--pat-muted);
+}
+
+.pub-note { margin: 0 0 0.6em; font-size: 0.86rem; color: var(--pat-muted); }
+
+.pub-links { display: flex; flex-wrap: wrap; gap: 0.45em; margin: 0.7em 0 0; }
+
+.pub-link {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.35em 0.75em;
+  border: 1px solid var(--pat-rule);
+  border-radius: var(--radius);
+  color: var(--pat-muted) !important;
+  text-decoration: none;
+}
+
+.pub-link:hover {
+  border-color: var(--pat-verdigris);
+  color: var(--pat-verdigris) !important;
+}
+
+.pub-abstract { margin-top: 0.8em; }
+
+.pub-abstract summary {
+  cursor: pointer;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--pat-muted);
+}
+
+.pub-abstract summary:hover { color: var(--pat-verdigris); }
+
+.pub-abstract > div {
+  margin-top: 0.7em;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--content);
+}
+
+@media (max-width: 640px) {
+  .pub { padding-left: 0.85em; }
+}

@@ -1,0 +1,101 @@
+{{ define "main" }}
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">{{ .Title }}</h1>
+    {{ with .Description }}<div class="post-description">{{ . }}</div>{{ end }}
+  </header>
+
+  <div class="post-content">
+    {{ .Content }}
+
+    {{ $page := . }}
+
+    {{/* YAML parses a bare `year: 2026` as uint64, and Hugo's sort and where
+         both misbehave on that type — sort actually inverts. Casting to int
+         once here makes the rest of the template well behaved, and means you
+         can write the year quoted or unquoted in front matter. */}}
+    {{ $papers := slice }}
+    {{ range .Params.papers }}
+      {{ $papers = $papers | append (merge . (dict "year" (int .year))) }}
+    {{ end }}
+
+    {{ $years := slice }}
+    {{ range sort $papers "year" "desc" }}{{ $years = $years | append .year }}{{ end }}
+    {{ $years = $years | uniq }}
+
+    {{ $linkTypes := slice
+        (dict "key" "pdf"    "label" "PDF")
+        (dict "key" "slides" "label" "Slides")
+        (dict "key" "poster" "label" "Poster")
+        (dict "key" "eprint" "label" "ePrint")
+        (dict "key" "doi"    "label" "DOI")
+        (dict "key" "code"   "label" "Code")
+        (dict "key" "video"  "label" "Talk")
+    }}
+
+    {{ range $year := $years }}
+      <h2 class="pub-year">{{ $year }}</h2>
+      <div class="pub-list">
+        {{ range $paper := where $papers "year" $year }}
+          <div class="pub">
+            <h3 class="pub-title">{{ $paper.title }}</h3>
+
+            <p class="pub-authors">
+              {{- $me := site.Params.authorName -}}
+              {{- range $i, $a := $paper.authors -}}
+                {{- if $i }}, {{ end -}}
+                {{- if eq $a $me }}<strong class="pub-me">{{ $a }}</strong>{{ else }}{{ $a }}{{ end -}}
+              {{- end -}}
+            </p>
+
+            {{ with $paper.venue }}
+              <p class="pub-venue">
+                <span class="pub-venue-name">{{ . }}</span>
+                {{ with $paper.status }}<span class="pub-status">{{ . }}</span>{{ end }}
+              </p>
+            {{ end }}
+
+            {{ with $paper.note }}<p class="pub-note">{{ . | markdownify }}</p>{{ end }}
+
+            {{/* An http(s) value is used as-is; anything else is looked up as
+                 a file dropped into content/publications/. A missing file
+                 warns at build time rather than rendering a dead button. */}}
+            {{ $resolved := slice }}
+            {{ range $lt := $linkTypes }}
+              {{ $val := index $paper $lt.key }}
+              {{ with $val }}
+                {{ $href := . }}
+                {{ if not (hasPrefix . "http") }}
+                  {{ $found := $page.Resources.GetMatch $val }}
+                  {{ if $found }}
+                    {{ $href = $found.RelPermalink }}
+                  {{ else }}
+                    {{ warnf "Publications: no file named %q in content/publications/ — link skipped" $val }}
+                    {{ $href = "" }}
+                  {{ end }}
+                {{ end }}
+                {{ with $href }}
+                  {{ $resolved = $resolved | append (dict "href" . "label" $lt.label) }}
+                {{ end }}
+              {{ end }}
+            {{ end }}
+
+            {{ with $resolved }}
+              <p class="pub-links">
+                {{ range . }}<a class="pub-link" href="{{ .href }}"{{ if hasPrefix .href "http" }} target="_blank" rel="noopener"{{ end }}>{{ .label }}</a>{{ end }}
+              </p>
+            {{ end }}
+
+            {{ with $paper.abstract }}
+              <details class="pub-abstract">
+                <summary>Abstract</summary>
+                <div>{{ . | markdownify }}</div>
+              </details>
+            {{ end }}
+          </div>
+        {{ end }}
+      </div>
+    {{ end }}
+  </div>
+</article>
+{{ end }}
