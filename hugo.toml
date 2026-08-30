@@ -47,6 +47,9 @@ summaryLength = 40
     endLevel = 4
 
 [params]
+  # Bolds your own name in author lists on the publications page.
+  # Must appear before any [params.*] sub-table or TOML scopes it wrongly.
+  authorName = 'Raghavendra N Vernekar'
   env = 'production'
   description = 'Research scholar in cryptography at CSA, IISc Bengaluru.'
   author = 'Raghavendra N Vernekar'
@@ -78,7 +81,7 @@ summaryLength = 40
     email        = 'Rnsvernekar@gmail.com'
     whatsapp     = '918080110967'
     whatsappShow = '+91 80801 10967'
-    web3formsKey = 'd73111bb-8d67-4f12-bcdb-cb21f9c02ce8'          # paste your Web3Forms access key here
+    web3formsKey = ''          # paste your Web3Forms access key here
 
   [params.likes]
     backend = 'local'          # 'local' or 'supabase'
@@ -97,6 +100,11 @@ summaryLength = 40
   name = 'Posts'
   url = '/posts/'
   weight = 10
+[[menu.main]]
+  identifier = 'publications'
+  name = 'Publications'
+  url = '/publications/'
+  weight = 15
 [[menu.main]]
   identifier = 'gallery'
   name = 'Photos'
