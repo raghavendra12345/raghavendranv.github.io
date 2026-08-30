@@ -1,0 +1,124 @@
+{{/*
+  Contact block: direct links plus a message form.
+
+  The form posts to Web3Forms, a free relay that forwards submissions to your
+  inbox. GitHub Pages has no server, so a relay is the only way a static site
+  can send mail. Set your key in hugo.toml:
+
+      [params.contact]
+        web3formsKey = 'your-access-key-here'
+        email        = 'you@example.com'
+        whatsapp     = '918080110967'   # digits only, country code first
+        whatsappShow = '+91 80801 10967'
+
+  Without a key the form renders disabled with a note, so the page never
+  silently swallows someone's message.
+*/}}
+
+{{ $c := site.Params.contact }}
+
+<div class="contact-direct">
+  {{ with $c.email }}
+  <a class="contact-line" href="mailto:{{ . }}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="2" y="4" width="20" height="16" rx="2"/>
+      <path d="m22 7-10 6L2 7"/>
+    </svg>
+    <span>{{ . }}</span>
+  </a>
+  {{ end }}
+
+  {{ with $c.whatsapp }}
+  <a class="contact-line" href="https://wa.me/{{ . }}" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.48-1.75-1.65-2.05-.17-.3-.02-.46.13-.6.14-.14.3-.35.45-.53.15-.18.2-.3.3-.5.1-.2.05-.38-.02-.53-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.42-.07-.13-.27-.2-.57-.35z"/>
+      <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.87 9.87 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.91-9.91a9.86 9.86 0 0 0-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.13h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.19 8.19 0 0 1-1.26-4.36c0-4.54 3.7-8.23 8.24-8.23a8.18 8.18 0 0 1 5.82 2.42 8.18 8.18 0 0 1 2.41 5.82c-.002 4.54-3.7 8.23-8.24 8.23z"/>
+    </svg>
+    <span>{{ $c.whatsappShow | default $c.whatsapp }}</span>
+  </a>
+  {{ end }}
+</div>
+
+<h2>Send a message</h2>
+
+{{ if $c.web3formsKey }}
+<form class="contact-form" id="contact-form" novalidate>
+  <input type="hidden" name="access_key" value="{{ $c.web3formsKey }}">
+  <input type="hidden" name="subject" value="New message from your website">
+  <input type="hidden" name="from_name" value="{{ site.Title }}">
+
+  {{/* Bots fill hidden fields; humans never see this one. */}}
+  <input type="checkbox" name="botcheck" class="contact-botcheck" tabindex="-1" autocomplete="off">
+
+  <label class="contact-field">
+    <span>Your name</span>
+    <input type="text" name="name" required autocomplete="name">
+  </label>
+
+  <label class="contact-field">
+    <span>Your email</span>
+    <input type="email" name="email" required autocomplete="email">
+  </label>
+
+  <label class="contact-field">
+    <span>Message</span>
+    <textarea name="message" rows="6" required></textarea>
+  </label>
+
+  <button type="submit" class="contact-submit">Send message</button>
+  <p class="contact-status" id="contact-status" role="status" aria-live="polite"></p>
+</form>
+
+<script>
+(function () {
+  var form = document.getElementById('contact-form');
+  var status = document.getElementById('contact-status');
+  if (!form) return;
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    var button = form.querySelector('.contact-submit');
+
+    if (!form.checkValidity()) {
+      status.textContent = 'Fill in your name, a valid email, and a message.';
+      status.className = 'contact-status is-error';
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = 'Sending…';
+    status.textContent = '';
+    status.className = 'contact-status';
+
+    try {
+      var res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(form)
+      });
+      var data = await res.json();
+
+      if (data.success) {
+        form.reset();
+        status.textContent = 'Message sent. I read everything and will reply soon.';
+        status.className = 'contact-status is-ok';
+      } else {
+        throw new Error(data.message || 'Relay rejected the submission');
+      }
+    } catch (err) {
+      status.textContent = 'That did not go through. Email me directly instead — the address is above.';
+      status.className = 'contact-status is-error';
+    } finally {
+      button.disabled = false;
+      button.textContent = 'Send message';
+    }
+  });
+})();
+</script>
+{{ else }}
+<p class="contact-note">
+  The form is not connected yet. Add your Web3Forms access key under
+  <code>[params.contact]</code> in <code>hugo.toml</code> to switch it on.
+</p>
+{{ end }}

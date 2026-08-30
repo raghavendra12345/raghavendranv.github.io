@@ -74,6 +74,17 @@ summaryLength = 40
     name = 'rss'
     url = 'index.xml'
 
+  [params.contact]
+    email        = 'Rnsvernekar@gmail.com'
+    whatsapp     = '918080110967'
+    whatsappShow = '+91 80801 10967'
+    web3formsKey = 'd73111bb-8d67-4f12-bcdb-cb21f9c02ce8'          # paste your Web3Forms access key here
+
+  [params.likes]
+    backend = 'local'          # 'local' or 'supabase'
+    url     = ''               # https://xxxx.supabase.co
+    anonKey = ''
+
   [params.fuseOpts]
     isCaseSensitive = false
     shouldSort = true
@@ -87,10 +98,20 @@ summaryLength = 40
   url = '/posts/'
   weight = 10
 [[menu.main]]
+  identifier = 'gallery'
+  name = 'Photos'
+  url = '/gallery/'
+  weight = 20
+[[menu.main]]
   identifier = 'about'
   name = 'About'
   url = '/about/'
   weight = 30
+[[menu.main]]
+  identifier = 'contact'
+  name = 'Contact'
+  url = '/contact/'
+  weight = 35
 [[menu.main]]
   identifier = 'search'
   name = 'Search'

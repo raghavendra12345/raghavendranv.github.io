@@ -1,0 +1,212 @@
+{{ define "main" }}
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">{{ .Title }}</h1>
+    {{ with .Description }}<div class="post-description">{{ . }}</div>{{ end }}
+  </header>
+
+  <div class="post-content">
+    {{ .Content }}
+
+    <div class="gallery">
+      {{ range $i, $p := .Params.photos }}
+        {{ $res := $.Resources.GetMatch $p.file }}
+        {{ if $res }}
+          {{/* Hugo generates the thumbnail; the browser never downloads the
+               full-size original until the lightbox opens. */}}
+          {{ $thumb := $res.Resize "800x q82 webp" }}
+          {{ $full  := $res.Resize "2000x q88" }}
+          {{ $id    := $p.id | default (printf "photo-%d" $i) }}
+          <figure class="gallery-item"
+                  data-full="{{ $full.RelPermalink }}"
+                  data-caption="{{ $p.caption }}">
+            <button class="gallery-open" type="button"
+                    aria-label="Open: {{ $p.caption }}">
+              <img src="{{ $thumb.RelPermalink }}"
+                   width="{{ $thumb.Width }}" height="{{ $thumb.Height }}"
+                   alt="{{ $p.caption }}" loading="lazy">
+            </button>
+            <figcaption>
+              <span class="gallery-caption">{{ $p.caption }}</span>
+              <button class="like" type="button" data-photo-id="{{ $id }}"
+                      aria-pressed="false" aria-label="Like this photo">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 21s-7.5-4.9-9.6-9.2A5.4 5.4 0 0 1 12 5.7a5.4 5.4 0 0 1 9.6 6.1C19.5 16.1 12 21 12 21z"/>
+                </svg>
+                <span class="like-count">0</span>
+              </button>
+            </figcaption>
+          </figure>
+        {{ else }}
+          {{ warnf "Gallery: no image found matching %q — check the filename in content/gallery/index.md" $p.file }}
+        {{ end }}
+      {{ end }}
+    </div>
+  </div>
+</article>
+
+<div class="lightbox" id="lightbox" hidden>
+  <button class="lightbox-close" type="button" aria-label="Close">&times;</button>
+  <button class="lightbox-nav lightbox-prev" type="button" aria-label="Previous">&#8249;</button>
+  <img class="lightbox-img" id="lightbox-img" alt="">
+  <button class="lightbox-nav lightbox-next" type="button" aria-label="Next">&#8250;</button>
+  <p class="lightbox-caption" id="lightbox-caption"></p>
+</div>
+
+<script>
+(function () {
+  /* ---------------------------------------------------------------
+     LIKES
+
+     Two storage backends. 'local' keeps counts in the visitor's own
+     browser, so it works with zero setup but each person sees only
+     their own likes. 'supabase' gives real shared counts — see the
+     setup notes in README.md.
+     --------------------------------------------------------------- */
+  var CFG = {{ site.Params.likes | jsonify | safeJS }} || {};
+  var MODE = CFG.backend || 'local';
+  var KEY = 'likes:' + location.pathname;
+
+  function readLocal() {
+    try { return JSON.parse(localStorage.getItem(KEY) || '{}'); }
+    catch (e) { return {}; }
+  }
+  function writeLocal(state) {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  var backends = {
+    local: {
+      async load(ids) {
+        var mine = readLocal();
+        var out = {};
+        ids.forEach(function (id) {
+          out[id] = { count: mine[id] ? 1 : 0, liked: !!mine[id] };
+        });
+        return out;
+      },
+      async toggle(id, liked) {
+        var mine = readLocal();
+        if (liked) { mine[id] = 1; } else { delete mine[id]; }
+        writeLocal(mine);
+        return { count: liked ? 1 : 0, liked: liked };
+      }
+    },
+
+    supabase: {
+      async load(ids) {
+        var mine = readLocal();
+        var url = CFG.url + '/rest/v1/photo_likes?select=photo_id,count&photo_id=in.('
+                + ids.map(encodeURIComponent).join(',') + ')';
+        var res = await fetch(url, {
+          headers: { apikey: CFG.anonKey, Authorization: 'Bearer ' + CFG.anonKey }
+        });
+        var rows = await res.json();
+        var out = {};
+        ids.forEach(function (id) { out[id] = { count: 0, liked: !!mine[id] }; });
+        (rows || []).forEach(function (r) {
+          out[r.photo_id] = { count: r.count || 0, liked: !!mine[r.photo_id] };
+        });
+        return out;
+      },
+      async toggle(id, liked) {
+        var mine = readLocal();
+        if (liked) { mine[id] = 1; } else { delete mine[id]; }
+        writeLocal(mine);
+        var res = await fetch(CFG.url + '/rest/v1/rpc/toggle_like', {
+          method: 'POST',
+          headers: {
+            apikey: CFG.anonKey,
+            Authorization: 'Bearer ' + CFG.anonKey,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ pid: id, delta: liked ? 1 : -1 })
+        });
+        var count = await res.json();
+        return { count: typeof count === 'number' ? count : 0, liked: liked };
+      }
+    }
+  };
+
+  var backend = backends[MODE] || backends.local;
+  var buttons = Array.prototype.slice.call(document.querySelectorAll('.like'));
+  var ids = buttons.map(function (b) { return b.dataset.photoId; });
+
+  function paint(btn, state) {
+    btn.querySelector('.like-count').textContent = state.count;
+    btn.classList.toggle('is-liked', state.liked);
+    btn.setAttribute('aria-pressed', state.liked ? 'true' : 'false');
+  }
+
+  if (ids.length) {
+    backend.load(ids).then(function (all) {
+      buttons.forEach(function (btn) {
+        paint(btn, all[btn.dataset.photoId] || { count: 0, liked: false });
+      });
+    }).catch(function () { /* counts stay at zero; the page still works */ });
+  }
+
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var liked = btn.getAttribute('aria-pressed') !== 'true';
+      var current = parseInt(btn.querySelector('.like-count').textContent, 10) || 0;
+      /* Optimistic update, so the heart responds instantly. */
+      paint(btn, { count: Math.max(0, current + (liked ? 1 : -1)), liked: liked });
+      btn.classList.add('just-liked');
+      setTimeout(function () { btn.classList.remove('just-liked'); }, 300);
+      backend.toggle(btn.dataset.photoId, liked)
+        .then(function (state) { paint(btn, state); })
+        .catch(function () {});
+    });
+  });
+
+  /* ---------------------------------------------------------------
+     LIGHTBOX
+     --------------------------------------------------------------- */
+  var items = Array.prototype.slice.call(document.querySelectorAll('.gallery-item'));
+  var box = document.getElementById('lightbox');
+  var boxImg = document.getElementById('lightbox-img');
+  var boxCap = document.getElementById('lightbox-caption');
+  var index = 0;
+
+  function show(i) {
+    index = (i + items.length) % items.length;
+    var el = items[index];
+    boxImg.src = el.dataset.full;
+    boxImg.alt = el.dataset.caption || '';
+    boxCap.textContent = el.dataset.caption || '';
+  }
+  function open(i) {
+    show(i);
+    box.hidden = false;
+    document.body.style.overflow = 'hidden';
+    box.querySelector('.lightbox-close').focus();
+  }
+  function close() {
+    box.hidden = true;
+    boxImg.src = '';
+    document.body.style.overflow = '';
+  }
+
+  items.forEach(function (el, i) {
+    el.querySelector('.gallery-open').addEventListener('click', function () { open(i); });
+  });
+
+  box.querySelector('.lightbox-close').addEventListener('click', close);
+  box.querySelector('.lightbox-prev').addEventListener('click', function (e) {
+    e.stopPropagation(); show(index - 1);
+  });
+  box.querySelector('.lightbox-next').addEventListener('click', function (e) {
+    e.stopPropagation(); show(index + 1);
+  });
+  box.addEventListener('click', function (e) { if (e.target === box) close(); });
+
+  document.addEventListener('keydown', function (e) {
+    if (box.hidden) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') show(index - 1);
+    if (e.key === 'ArrowRight') show(index + 1);
+  });
+})();
+</script>
+{{ end }}
