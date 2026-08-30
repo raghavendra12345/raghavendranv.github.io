@@ -10,7 +10,7 @@ buildFuture = false
 summaryLength = 40
 
 [pagination]
-  pagerSize = 10
+  pagerSize = 5
 
 # Only 'tags'. A 'topics' taxonomy would fight the /topics/ content
 # section for the same URL — the section wins, so tags do the grouping
@@ -74,6 +74,9 @@ summaryLength = 40
     name = 'github'
     url = 'https://github.com/raghavendra12345'
   [[params.socialIcons]]
+    name = 'linkedin'
+    url = 'https://www.linkedin.com/in/raghavendra-v-427849136/'
+  [[params.socialIcons]]
     name = 'rss'
     url = 'index.xml'
 
@@ -81,6 +84,9 @@ summaryLength = 40
     email        = 'Rnsvernekar@gmail.com'
     whatsapp     = '918080110967'
     whatsappShow = '+91 80801 10967'
+    linkedin     = 'https://www.linkedin.com/in/raghavendra-v-427849136/'
+    website      = 'https://sites.google.com/view/raghavendranv/home'
+    websiteLabel = 'Google Sites page'
     web3formsKey = ''          # paste your Web3Forms access key here
 
   [params.likes]
@@ -111,9 +117,9 @@ summaryLength = 40
   url = '/gallery/'
   weight = 20
 [[menu.main]]
-  identifier = 'about'
-  name = 'About'
-  url = '/about/'
+  identifier = 'topics'
+  name = 'Topics'
+  url = '/topics/'
   weight = 30
 [[menu.main]]
   identifier = 'contact'

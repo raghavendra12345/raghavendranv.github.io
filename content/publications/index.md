@@ -27,7 +27,7 @@ math: true
 # Available link fields: pdf, slides, poster, eprint, doi, code, video
 # ---------------------------------------------------------------
 papers:
-  - title: "Constant-Round MPC Protocols with Fall-back Security"
+  - title: "Constant Round MPC Protocols with Fall-back Security"
     authors:
       - "Anasuya Acharya"
       - "Aditya Patankar"
@@ -36,17 +36,35 @@ papers:
       - "Raghavendra N Vernekar"
       
     year: 2026
-    venue: "TCC 2026"
+    venue: "Theory of Cryptography (TCC) 2026"
     status: "To appear"
-    note: 
+    
     # pdf: "paper.pdf"
     # slides: "slides.pdf"
-    # eprint: "https://eprint.iacr.org/2026/xxx"
+    eprint: "https://eprint.iacr.org/2026/1768"
     # doi: "https://doi.org/10.1007/..."
     # code: "https://github.com/raghavendra12345/..."
     # abstract: |
     #   Paste your abstract here. Markdown and $math$ both work.
 
----  
+  - title: "Multi-key Homomorphic Encryption and Secret Sharing"
+    authors:
+      - "Raghavendra N Vernekar"
+    year: 2023                         # CHECK: year of submission
+    venue: "M.S. Thesis, Department of CSE, IIT Madras"
+    status: "Thesis"
+    note: "Advised by Shweta Agrawal."
+    pdf: "https://drive.google.com/file/d/1xfoPuyNhxV1JixPFKoe1_Q8dxxGJnY96/view?usp=sharing"
 
+  - title: "B.Tech Project Title"
+    authors:
+      - "Raghavendra N Vernekar"
+    year: 2020                          # CHECK: year of submission
+    venue: "B.Tech Project, National Institute of Technology Goa"
+    status: "Thesis"
+    note: "Advised by Purushothama B R."
+    pdf: "https://drive.google.com/file/d/1igRm4Aigxz4nS6cH6bjK-qbckflPzqm7/view?usp=sharing"
 
+---
+
+Preprints are linked wherever the venue permits it.

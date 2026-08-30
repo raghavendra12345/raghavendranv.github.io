@@ -11,7 +11,14 @@
     <div class="gallery">
       {{ range $i, $p := .Params.photos }}
         {{ $res := $.Resources.GetMatch $p.file }}
+        {{/* Hugo labels HEIC as an "image" but cannot decode it, so check the
+             media subtype rather than the resource type. These are the formats
+             Hugo's image processing actually handles. */}}
+        {{ $ok := false }}
         {{ if $res }}
+          {{ $ok = in (slice "jpeg" "png" "gif" "tiff" "bmp" "webp") $res.MediaType.SubType }}
+        {{ end }}
+        {{ if $ok }}
           {{/* Hugo generates the thumbnail; the browser never downloads the
                full-size original until the lightbox opens. */}}
           {{ $thumb := $res.Resize "800x q82 webp" }}
@@ -37,6 +44,8 @@
               </button>
             </figcaption>
           </figure>
+        {{ else if $res }}
+          {{ warnf "Gallery: %q is %s, which Hugo cannot process. HEIC (the iPhone default) and camera RAW are unsupported — export to JPEG or PNG." $p.file $res.MediaType }}
         {{ else }}
           {{ warnf "Gallery: no image found matching %q — check the filename in content/gallery/index.md" $p.file }}
         {{ end }}

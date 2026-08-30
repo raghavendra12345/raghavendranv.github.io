@@ -18,15 +18,15 @@ hidemeta: true
 photos:
   - file: "sample-01.jpg"
     id: "nandi-sunrise"
-    caption: "Sunrise over Nandi Hills, waiting out the fog."
+    caption: "From the hills of Mahabaleshwar."
 
   - file: "sample-02.jpg"
     id: "campus-monsoon"
-    caption: "First monsoon shower on campus."
+    caption: "Mahabaleshwar Scenic Viewpoint."
 
   - file: "sample-03.jpg"
     id: "harbour-dusk"
-    caption: "Dusk at the harbour, Goa."
+    caption: "Pratapgad Fort."
 
   - file: "sample-04.jpg"
     id: "street-lantern"
