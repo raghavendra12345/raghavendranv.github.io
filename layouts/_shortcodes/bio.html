@@ -1,0 +1,34 @@
+{{/*
+  Personal bio block for the home page.
+
+  Usage in content/_index.md:
+
+    {{< bio
+        image="images/profile.jpg"
+        name="Raghavendra N Vernekar"
+        role="Research Scholar, CSA, IISc Bengaluru" >}}
+    Your paragraphs here. Markdown works, including [links](https://example.com).
+    {{< /bio >}}
+
+  `image` is relative to the static/ folder. Omit it and the block renders
+  as text only, so the page never breaks while you're finding a photo.
+*/}}
+<div class="bio">
+  {{ with .Get "image" }}
+    <div class="bio-photo">
+      <img src="{{ . | relURL }}"
+           alt="{{ $.Get `name` | default `Profile photo` }}"
+           loading="eager"
+           width="180" height="180">
+    </div>
+  {{ end }}
+
+  <div class="bio-body">
+    {{ with .Get "name" }}<h1 class="bio-name">{{ . }}</h1>{{ end }}
+    {{ with .Get "role" }}<p class="bio-role">{{ . | markdownify }}</p>{{ end }}
+    {{ .Inner | .Page.RenderString (dict "display" "block") }}
+    <div class="bio-links">
+      {{ partial "social_icons.html" (dict "align" "left") }}
+    </div>
+  </div>
+</div>

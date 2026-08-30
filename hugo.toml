@@ -48,8 +48,8 @@ summaryLength = 40
 
 [params]
   env = 'production'
-  description = 'Notes and essays on cryptography.'
-  author = 'Raghavendra Vernekar'
+  description = 'Research scholar in cryptography at CSA, IISc Bengaluru.'
+  author = 'Raghavendra N Vernekar'
   DateFormat = '2 January 2006'
   defaultTheme = 'auto'
   disableThemeToggle = false
@@ -63,16 +63,9 @@ summaryLength = 40
   ShowRssButtonInSectionTermList = true
   ShowToc = true
   TocOpen = false
+  disableSpecial1stPost = true
   hidemeta = false
   comments = false
-
-  [params.homeInfoParams]
-    Title = 'Cryptography, worked out in the open'
-    Content = """
-Long-form notes on the mathematics behind modern cryptography — finite fields,
-elliptic curves, lattices, and the proofs that hold the whole thing together.
-Written for people who want the details, not the analogy.
-"""
 
   [[params.socialIcons]]
     name = 'github'

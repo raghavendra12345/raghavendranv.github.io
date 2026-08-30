@@ -1,0 +1,7 @@
+Put your photo here, named exactly: profile.jpg
+
+Square crop, at least 360x360 px so it stays sharp on high-DPI screens.
+If you use a .png or .webp instead, update the image= value in
+content/_index.md to match.
+
+Delete this file once your photo is in place.
