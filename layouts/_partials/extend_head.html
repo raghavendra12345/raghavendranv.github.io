@@ -1,0 +1,52 @@
+{{/*
+  Extends PaperMod's <head>.
+  Note the directory: Hugo 0.146+ and current PaperMod use layouts/_partials/,
+  not layouts/partials/. Older tutorials will tell you the wrong path.
+*/}}
+
+{{/* --- Typefaces --- */}}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Martian+Mono:wght@300;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+{{/*
+  --- KaTeX ---
+  Loaded only on pages with `math: true` in front matter, or site-wide if you
+  set `math = true` under [params]. The 0.16 range resolves to the newest
+  0.16.x on jsDelivr. If you want Subresource Integrity, copy the current
+  hashes from https://katex.org/docs/browser and add integrity= attributes —
+  they must match the exact pinned version, so pin one if you do.
+*/}}
+{{ if or .Params.math .Site.Params.math }}
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css"
+        crossorigin="anonymous">
+  <script defer
+          src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js"
+          crossorigin="anonymous"></script>
+  <script defer
+          src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js"
+          crossorigin="anonymous"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$',  right: '$$',  display: true},
+              {left: '\\[', right: '\\]', display: true},
+              {left: '$',   right: '$',   display: false},
+              {left: '\\(', right: '\\)', display: false}
+            ],
+            ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            throwOnError: false,
+            macros: {
+              '\\Z':     '\\mathbb{Z}',
+              '\\F':     '\\mathbb{F}',
+              '\\E':     '\\mathbb{E}',
+              '\\Adv':   '\\mathsf{Adv}',
+              '\\Enc':   '\\mathsf{Enc}',
+              '\\Dec':   '\\mathsf{Dec}',
+              '\\Gen':   '\\mathsf{Gen}',
+              '\\negl':  '\\mathsf{negl}',
+              '\\given': '\\,\\vert\\,'
+            }
+          });"></script>
+{{ end }}

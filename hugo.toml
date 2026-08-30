@@ -1,0 +1,105 @@
+baseURL = 'https://raghavendra12345.github.io/'
+languageCode = 'en-us'
+title = 'Raghavendra N Vernekar'
+theme = 'PaperMod'
+
+enableRobotsTXT = true
+enableEmoji = true
+buildDrafts = false
+buildFuture = false
+summaryLength = 40
+
+[pagination]
+  pagerSize = 10
+
+# Only 'tags'. A 'topics' taxonomy would fight the /topics/ content
+# section for the same URL — the section wins, so tags do the grouping
+# and each topic hub page pulls in posts by tag.
+[taxonomies]
+  tag = 'tags'
+
+# Home page also emits JSON so the client-side search index can be built.
+[outputs]
+  home = ['HTML', 'RSS', 'JSON']
+
+# ---------------------------------------------------------------
+# Math. This block is what makes $...$ and $$...$$ survive Markdown
+# processing so KaTeX can render them in the browser. Without the
+# passthrough extension, Goldmark eats backslashes and underscores
+# and your equations arrive mangled.
+# ---------------------------------------------------------------
+[markup]
+  [markup.goldmark.extensions.passthrough]
+    enable = true
+    [markup.goldmark.extensions.passthrough.delimiters]
+      block = [['\[', '\]'], ['$$', '$$']]
+      inline = [['\(', '\)'], ['$', '$']]
+  [markup.goldmark.renderer]
+    unsafe = true
+  [markup.highlight]
+    noClasses = false
+    codeFences = true
+    guessSyntax = true
+    lineNos = false
+    style = 'nord'
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 4
+
+[params]
+  env = 'production'
+  description = 'Notes and essays on cryptography.'
+  author = 'Raghavendra Vernekar'
+  DateFormat = '2 January 2006'
+  defaultTheme = 'auto'
+  disableThemeToggle = false
+
+  ShowReadingTime = true
+  ShowShareButtons = false
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowWordCount = false
+  ShowRssButtonInSectionTermList = true
+  ShowToc = true
+  TocOpen = false
+  hidemeta = false
+  comments = false
+
+  [params.homeInfoParams]
+    Title = 'Cryptography, worked out in the open'
+    Content = """
+Long-form notes on the mathematics behind modern cryptography — finite fields,
+elliptic curves, lattices, and the proofs that hold the whole thing together.
+Written for people who want the details, not the analogy.
+"""
+
+  [[params.socialIcons]]
+    name = 'github'
+    url = 'https://github.com/raghavendra12345'
+  [[params.socialIcons]]
+    name = 'rss'
+    url = 'index.xml'
+
+  [params.fuseOpts]
+    isCaseSensitive = false
+    shouldSort = true
+    threshold = 0.4
+    minMatchCharLength = 2
+    keys = ['title', 'permalink', 'summary', 'content']
+
+[[menu.main]]
+  identifier = 'posts'
+  name = 'Posts'
+  url = '/posts/'
+  weight = 10
+[[menu.main]]
+  identifier = 'about'
+  name = 'About'
+  url = '/about/'
+  weight = 30
+[[menu.main]]
+  identifier = 'search'
+  name = 'Search'
+  url = '/search/'
+  weight = 40

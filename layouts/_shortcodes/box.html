@@ -1,0 +1,15 @@
+{{/*
+  Theorem / definition / lemma block.
+
+  Usage:
+    {{< box "Definition 1" >}}
+    A group $(G, \cdot)$ is **cyclic** if there exists $g \in G$ with
+    $G = \{ g^k : k \in \Z \}$.
+    {{< /box >}}
+
+  The label is optional; without one you get a plain callout.
+*/}}
+<div class="mathbox">
+  {{ with .Get 0 }}<span class="mathbox-label">{{ . }}</span>{{ end }}
+  {{ .Inner | .Page.RenderString (dict "display" "block") }}
+</div>

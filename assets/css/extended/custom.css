@@ -1,0 +1,338 @@
+/* =============================================================
+   PATINA — a design layer over PaperMod
+   -------------------------------------------------------------
+   Palette taken from oxidised brass: the blue-green of verdigris
+   against cool gray paper, with raw brass reserved for one job
+   only — marking mathematics. Nothing else in the site is allowed
+   to use brass, so an equation is always visually the loudest
+   thing on the page. That is the point of the whole site.
+
+   PaperMod auto-loads every .css file in assets/css/extended/.
+   No @import needed.
+   ============================================================= */
+
+:root {
+  /* --- our named tokens --- */
+  --pat-ink:        #10151a;   /* deep blue-black */
+  --pat-paper:      #edf0ec;   /* cool gray-green, not cream */
+  --pat-paper-lift: #f6f8f5;   /* raised cards */
+  --pat-verdigris:  #1c6f63;   /* primary accent: links, rules */
+  --pat-brass:      #9a6f24;   /* reserved: mathematics only */
+  --pat-rule:       #c9d2cb;
+  --pat-muted:      #5c6a63;
+
+  /* --- remap PaperMod's variables onto them --- */
+  --theme:          var(--pat-paper);
+  --entry:          var(--pat-paper-lift);
+  --primary:        var(--pat-ink);
+  --secondary:      var(--pat-muted);
+  --tertiary:       var(--pat-rule);
+  --content:        #1b2228;
+  --border:         var(--pat-rule);
+  --code-bg:        #e3e8e3;
+  --code-block-bg:  #12181d;
+
+  --main-width: 700px;
+  --nav-width: 1000px;
+  --radius: 2px;      /* near-square: this is a technical document */
+  --gap: 24px;
+}
+
+:root[data-theme="dark"] {
+  --pat-ink:        #0d1114;
+  --pat-paper:      #0f1418;
+  --pat-paper-lift: #161d22;
+  --pat-verdigris:  #4fb8a5;
+  --pat-brass:      #d3a757;
+  --pat-rule:       #2a343a;
+  --pat-muted:      #8b9a93;
+
+  --theme:          var(--pat-paper);
+  --entry:          var(--pat-paper-lift);
+  --primary:        #dde5e0;
+  --secondary:      var(--pat-muted);
+  --tertiary:       var(--pat-rule);
+  --content:        #c3cec8;
+  --border:         var(--pat-rule);
+  --code-bg:        #1b2429;
+  --code-block-bg:  #0a0e11;
+}
+
+/* -------------------------------------------------------------
+   TYPOGRAPHY
+   Newsreader for prose — a text serif that sits comfortably
+   beside KaTeX's Computer Modern rather than fighting it.
+   Martian Mono for headings — engineered, wide-tracked, reads as
+   key material. Used sparingly and never below h3.
+   ------------------------------------------------------------- */
+
+body {
+  font-family: "Newsreader", Georgia, "Times New Roman", serif;
+  font-size: 19px;
+  line-height: 1.65;
+  font-variant-numeric: oldstyle-num;
+}
+
+.post-content { font-size: 1.02rem; }
+
+.post-content p { margin: 1.15em 0; }
+
+h1, h2, h3,
+.post-title,
+.entry-header h2 {
+  font-family: "Martian Mono", ui-monospace, monospace;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+  font-variant-numeric: lining-nums;
+}
+
+h4, h5, h6 {
+  font-family: "Newsreader", Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.post-title { font-size: 1.9rem; }
+
+/* Section headings sit above a verdigris hairline that runs the
+   full measure — the divider marks structure, it isn't decoration. */
+.post-content h2 {
+  font-size: 1.28rem;
+  margin-top: 2.6em;
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid var(--pat-verdigris);
+}
+
+.post-content h3 {
+  font-size: 1.05rem;
+  margin-top: 2em;
+  color: var(--pat-verdigris);
+}
+
+/* Site title and nav in the display face, small and tracked out */
+.logo a {
+  font-family: "Martian Mono", monospace !important;
+  font-weight: 700;
+  font-size: 1rem !important;
+  letter-spacing: -0.02em;
+}
+
+#menu a,
+.post-meta,
+.breadcrumbs,
+.entry-footer,
+.footer {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.76rem;
+  letter-spacing: 0.02em;
+  font-variant-numeric: lining-nums;
+}
+
+#menu a { text-transform: lowercase; }
+
+code, kbd, pre, .highlight {
+  font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+  font-variant-numeric: lining-nums;
+}
+
+.post-content code { font-size: 0.82em; padding: 2px 5px; }
+
+.post-content pre code { font-size: 0.8rem; line-height: 1.55; }
+
+/* -------------------------------------------------------------
+   LINKS
+   ------------------------------------------------------------- */
+
+.post-content a {
+  color: var(--pat-verdigris);
+  text-decoration: none;
+  border-bottom: 1px solid var(--pat-rule);
+  box-shadow: none;
+}
+
+.post-content a:hover { border-bottom-color: var(--pat-verdigris); }
+
+/* -------------------------------------------------------------
+   MATHEMATICS — the signature
+   Display equations get a brass hairline in the margin and are
+   allowed to scroll sideways. That second part matters more than
+   it sounds: a long pairing-based expression will otherwise blow
+   out the layout on a phone, and this is a site full of them.
+   ------------------------------------------------------------- */
+
+.katex { font-size: 1.05em; }
+
+.katex-display {
+  margin: 1.7em 0;
+  padding: 0.35em 0 0.35em 1.15em;
+  border-left: 2px solid var(--pat-brass);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}
+
+/* Left-aligned rather than centred: a wide equation then starts at its
+   beginning instead of scrolled into the middle of itself. */
+.katex-display > .katex { text-align: left !important; }
+
+/* Inline math keeps the prose colour so it doesn't strobe mid-sentence */
+.post-content .katex { color: var(--content); }
+
+/* \tag{1} equation numbers pick up brass */
+.katex-display .tag { color: var(--pat-brass); }
+
+/* -------------------------------------------------------------
+   THEOREM / DEFINITION BLOCKS
+   Used via the {{< box >}} shortcode.
+   ------------------------------------------------------------- */
+
+.mathbox {
+  margin: 1.8em 0;
+  padding: 1em 1.2em;
+  background: var(--entry);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--pat-verdigris);
+  border-radius: var(--radius);
+}
+
+.mathbox-label {
+  display: block;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--pat-verdigris);
+  margin-bottom: 0.5em;
+}
+
+.mathbox > :last-child { margin-bottom: 0; }
+
+/* -------------------------------------------------------------
+   BLOCKQUOTE
+   ------------------------------------------------------------- */
+
+.post-content blockquote {
+  border-left: 2px solid var(--pat-rule);
+  font-style: italic;
+  color: var(--pat-muted);
+}
+
+/* -------------------------------------------------------------
+   POST LISTS
+   ------------------------------------------------------------- */
+
+.post-entry {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  padding: 1.4em 0;
+  transition: none;
+}
+
+.post-entry:hover { transform: none; box-shadow: none; }
+
+.post-entry:hover .entry-header h2 { color: var(--pat-verdigris); }
+
+.entry-header h2 { font-size: 1.18rem; }
+
+.entry-content { font-size: 0.92rem; color: var(--pat-muted); }
+
+.first-entry { min-height: auto; padding: 1.4em 0 2em; }
+
+/* -------------------------------------------------------------
+   TOPIC HUB CARDS
+   ------------------------------------------------------------- */
+
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+  margin: 2em 0;
+}
+
+.topic-card {
+  display: block;
+  padding: 1.1em 1.2em;
+  background: var(--entry);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border);
+}
+
+.topic-card:hover { border-color: var(--pat-verdigris); }
+
+.topic-card h3 {
+  margin: 0 0 0.35em;
+  font-size: 0.95rem;
+  font-family: "Martian Mono", monospace;
+  color: var(--primary);
+}
+
+.topic-card p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--pat-muted);
+  line-height: 1.5;
+}
+
+/* Related-posts list on a topic page */
+.topic-posts { list-style: none; margin: 1.5em 0 0; padding: 0; }
+
+.topic-posts li {
+  padding: 0.55em 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  gap: 1em;
+  align-items: baseline;
+}
+
+.topic-posts time {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  color: var(--pat-muted);
+  white-space: nowrap;
+}
+
+/* -------------------------------------------------------------
+   TABLES — S-boxes and parameter tables need to be readable
+   ------------------------------------------------------------- */
+
+.post-content table {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.8rem;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.post-content table th {
+  color: var(--pat-verdigris);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.72rem;
+}
+
+/* -------------------------------------------------------------
+   QUALITY FLOOR
+   ------------------------------------------------------------- */
+
+a:focus-visible,
+button:focus-visible,
+.topic-card:focus-visible {
+  outline: 2px solid var(--pat-verdigris);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+@media (max-width: 700px) {
+  body { font-size: 18px; }
+  .post-title { font-size: 1.5rem; }
+  .post-content h2 { font-size: 1.15rem; }
+  .katex-display { padding-left: 0.9em; }
+}

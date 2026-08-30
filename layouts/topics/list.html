@@ -1,0 +1,19 @@
+{{ define "main" }}
+<header class="page-header">
+  <h1>{{ .Title }}</h1>
+  {{ with .Description }}<div class="post-description">{{ . }}</div>{{ end }}
+</header>
+
+<div class="post-content">
+  {{ .Content }}
+
+  <div class="topic-grid">
+    {{ range .Pages.ByWeight }}
+      <a class="topic-card" href="{{ .Permalink }}">
+        <h3>{{ .Title }}</h3>
+        <p>{{ .Description | default .Summary }}</p>
+      </a>
+    {{ end }}
+  </div>
+</div>
+{{ end }}

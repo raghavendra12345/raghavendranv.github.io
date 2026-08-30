@@ -1,0 +1,43 @@
+{{ define "main" }}
+<article class="post-single">
+  <header class="post-header">
+    {{ partial "breadcrumbs.html" . }}
+    <h1 class="post-title">{{ .Title }}</h1>
+    {{ with .Description }}<div class="post-description">{{ . }}</div>{{ end }}
+  </header>
+
+  {{ if and .Params.ShowToc .TableOfContents }}
+    {{ partial "toc.html" . }}
+  {{ end }}
+
+  <div class="post-content">
+    {{ .Content }}
+
+    {{/*
+      Pull in every post tagged with this topic's `tag` front-matter value.
+      Write once in the post's tags, appears here automatically.
+    */}}
+    {{ with .Params.tag }}
+      {{ $tagged := where (where site.RegularPages "Section" "posts") ".Params.tags" "intersect" (slice .) }}
+      {{ if $tagged }}
+        <h2>Posts on this topic</h2>
+        <ul class="topic-posts">
+          {{ range $tagged.ByDate.Reverse }}
+            <li>
+              <a href="{{ .Permalink }}">{{ .Title }}</a>
+              <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2006" }}</time>
+            </li>
+          {{ end }}
+        </ul>
+      {{ else }}
+        <h2>Posts on this topic</h2>
+        <p><em>Nothing published here yet.</em></p>
+      {{ end }}
+    {{ end }}
+  </div>
+
+  <footer class="post-footer">
+    {{ partial "post_nav_links.html" . }}
+  </footer>
+</article>
+{{ end }}
