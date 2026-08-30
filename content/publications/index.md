@@ -56,7 +56,7 @@ papers:
     note: "Advised by Shweta Agrawal."
     pdf: "https://drive.google.com/file/d/1xfoPuyNhxV1JixPFKoe1_Q8dxxGJnY96/view?usp=sharing"
 
-  - title: "B.Tech Project Title"
+  - title: "B.Tech Project"
     authors:
       - "Raghavendra N Vernekar"
     year: 2020                          # CHECK: year of submission

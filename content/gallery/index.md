@@ -16,22 +16,34 @@ hidemeta: true
 # so renaming an id resets that photo's likes.
 # ---------------------------------------------------------------
 photos:
-  - file: "sample-01.jpg"
-    id: "nandi-sunrise"
+  - file: "maha-01.jpg"
+    id: "Mahabaleshwar"
     caption: "From the hills of Mahabaleshwar."
 
-  - file: "sample-02.jpg"
-    id: "campus-monsoon"
+  - file: "maha-02.jpg"
+    id: "Mahabaleshwar-view"
     caption: "Mahabaleshwar Scenic Viewpoint."
 
-  - file: "sample-03.jpg"
-    id: "harbour-dusk"
+  - file: "maha-03.jpg"
+    id: "Pratapgad"
     caption: "Pratapgad Fort."
 
-  - file: "sample-04.jpg"
-    id: "street-lantern"
-    caption: "A lantern seller, somewhere off the main road."
+  - file: "iisc-04.jpg"
+    id: "IISc"
+    caption: "IISc Main Building"
+
+  - file: "iisc-05.jpg
+    id: "Lotus"
+    caption: "IISc EE Garden"
+    
+  - file: "google-06.jpg
+    id: "Google"
+    caption: "From Shikara:Google Bengaluru."
+
+  - file: "temple-07.jpg
+    id: "Bhog"
+    caption: "Bhog Nandishwara Temple."
 ---
 
-Photography is what I do when I am not thinking about protocols. Click any
-photo to see it larger; arrow keys move between them.
+A collection of moments, places, and random things that seemed worth pointing a camera at.
+
