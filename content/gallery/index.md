@@ -28,19 +28,19 @@ photos:
     id: "Pratapgad"
     caption: "Pratapgad Fort."
 
-  - file: "iisc-04.jpg"
+  - file: "iisc-04.jpeg"
     id: "IISc"
     caption: "IISc Main Building"
 
-  - file: "iisc-05.jpg"
+  - file: "iisc-05.jpeg"
     id: "IISc-garden"
     caption: "IISc EE Garden"
     
-  - file: "google-06.jpg"
+  - file: "google-06.jpeg"
     id: "Google"
     caption: "From Shikara:Google Bengaluru."
 
-  - file: "temple-07.jpg"
+  - file: "temple-07.jpeg"
     id: "Bhog"
     caption: "Bhog Nandishwara Temple."
 ---
