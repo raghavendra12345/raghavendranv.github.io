@@ -736,3 +736,263 @@ button:focus-visible,
 @media (max-width: 640px) {
   .pub { padding-left: 0.85em; }
 }
+
+/* -------------------------------------------------------------
+   TIMELINE (conferences)
+   A single verdigris rule with a marker per event. The year sits
+   in its own gutter so the eye can scan down the dates alone.
+   ------------------------------------------------------------- */
+
+.timeline {
+  list-style: none;
+  margin: 1.5em 0 0;
+  padding: 0 0 0 1px;
+  border-left: 1px solid var(--border);
+}
+
+.tl-item {
+  position: relative;
+  display: flex;
+  gap: 1.1rem;
+  align-items: baseline;
+  padding: 0.75em 0 0.75em 1.4em;
+}
+
+/* The marker sits on the rule itself. */
+.tl-item::before {
+  content: "";
+  position: absolute;
+  left: -4.5px;
+  top: 1.35em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--theme);
+  border: 2px solid var(--pat-verdigris);
+}
+
+.tl-year {
+  flex: 0 0 3.2em;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.76rem;
+  color: var(--pat-muted);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.tl-body { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5em 0.8em; }
+
+.tl-name {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--primary);
+  letter-spacing: -0.01em;
+}
+
+.tl-where { font-size: 0.88rem; color: var(--pat-muted); }
+
+.tl-tags { display: inline-flex; flex-wrap: wrap; gap: 0.35em; }
+
+.tl-tag {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.2em 0.5em;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--pat-muted);
+  white-space: nowrap;
+}
+
+.tl-tag.is-role {
+  border-color: var(--pat-verdigris);
+  color: var(--pat-verdigris);
+}
+
+/* -------------------------------------------------------------
+   TEACHING
+   ------------------------------------------------------------- */
+
+.teach { margin-top: 1.5em; }
+
+.teach-year {
+  display: flex;
+  gap: 1.6rem;
+  align-items: flex-start;
+  padding: 0.9em 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.teach-year:last-child { border-bottom: none; }
+
+.teach-y {
+  flex: 0 0 3.2em;
+  margin: 0 !important;
+  font-family: "IBM Plex Mono", monospace !important;
+  font-size: 0.9rem !important;
+  color: var(--pat-verdigris) !important;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.teach-list { list-style: none; margin: 0; padding: 0; flex: 1 1 auto; }
+
+.teach-list li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3em 0.7em;
+  align-items: baseline;
+  padding: 0.2em 0;
+}
+
+.teach-course { font-size: 0.95rem; color: var(--content); }
+
+.teach-place {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.7rem;
+  color: var(--pat-muted);
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 640px) {
+  .tl-item { flex-direction: column; gap: 0.3rem; padding-left: 1.2em; }
+  .teach-year { flex-direction: column; gap: 0.4rem; }
+}
+
+/* -------------------------------------------------------------
+   NAV DROPDOWN + SEARCH ICON
+   ------------------------------------------------------------- */
+
+/* PaperMod sets overflow-x:auto on .menu for narrow screens, which clips
+   any absolutely-positioned dropdown. Allow overflow on wide viewports and
+   restore scrolling on mobile, where the submenu renders inline anyway. */
+.menu {
+  align-items: center;
+  overflow: visible;
+}
+
+@media (max-width: 640px) {
+  .menu { overflow-x: auto; flex-wrap: wrap; }
+}
+
+.has-sub { position: relative; }
+
+.sub-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.76rem;
+  letter-spacing: 0.02em;
+  text-transform: lowercase;
+  color: var(--primary);
+}
+
+.sub-toggle .caret { transition: transform 0.15s ease; opacity: 0.6; }
+
+.has-sub:hover .caret,
+.has-sub.is-open .caret { transform: rotate(180deg); }
+
+.submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 60;
+  min-width: 11rem;
+  margin: 0;
+  padding: 0.35rem 0;
+  list-style: none;
+  background: var(--entry);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.13);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity 0.13s ease, transform 0.13s ease, visibility 0.13s;
+}
+
+.has-sub:hover .submenu,
+.has-sub:focus-within .submenu,
+.has-sub.is-open .submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.submenu li { margin: 0; }
+
+/* PaperMod's header sets line-height 60px to centre the nav bar; inside a
+   vertical dropdown that turns each item into a 71px slab, so reset it. */
+.submenu a {
+  display: block;
+  line-height: 1.3;
+  padding: 0.55em 1em;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.76rem;
+  text-transform: lowercase;
+  color: var(--primary);
+  white-space: nowrap;
+}
+
+.submenu a:hover { background: var(--code-bg); color: var(--pat-verdigris); }
+
+.nav-search a { display: inline-flex; align-items: center; }
+
+/* -------------------------------------------------------------
+   DOWNLOAD BUTTON (resume)
+   ------------------------------------------------------------- */
+
+.bio-actions { margin: 1.3em 0 0; }
+
+.btn-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.6em 1.1em;
+  border: 1px solid var(--pat-verdigris);
+  border-radius: var(--radius);
+  color: var(--pat-verdigris) !important;
+  text-decoration: none;
+}
+
+.btn-download:hover {
+  background: var(--pat-verdigris);
+  color: var(--theme) !important;
+}
+
+.teach-course.is-link {
+  color: var(--content) !important;
+  border-bottom: 1px solid var(--pat-rule);
+}
+
+.teach-course.is-link:hover { border-bottom-color: var(--pat-verdigris); }
+
+@media (max-width: 640px) {
+  .submenu {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+    min-width: 0;
+    padding: 0 0 0 0.9rem;
+    display: none;
+  }
+  .has-sub.is-open .submenu { display: block; }
+}
+
+/* The generic .post-content a rule adds an underline; a button should not
+   have one, and it is inside .post-content on the home page. */
+.post-content .btn-download,
+.btn-download { border-bottom: none !important; text-decoration: none !important; }

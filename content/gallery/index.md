@@ -1,7 +1,7 @@
 ---
 title: "Photographs"
 type: "gallery"
-description: "A place for pictures I like, kept outside the usual feeds."
+description: "A place for pictures I like and clicked."
 ShowToc: false
 ShowBreadCrumbs: false
 ShowReadingTime: false

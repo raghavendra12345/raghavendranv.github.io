@@ -1,0 +1,54 @@
+{{ define "main" }}
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">{{ .Title }}</h1>
+    {{ with .Description }}<div class="post-description">{{ . }}</div>{{ end }}
+  </header>
+
+  <div class="post-content">
+    {{ .Content }}
+
+    {{/* ---------------- Conferences ---------------- */}}
+    {{ with .Params.conferences }}
+      <h2>Conferences and workshops attended</h2>
+      <ol class="timeline">
+        {{ range . }}
+          <li class="tl-item">
+            <span class="tl-year">{{ .year }}</span>
+            <div class="tl-body">
+              <span class="tl-name">{{ .name }}</span>
+              {{ with .where }}<span class="tl-where">{{ . }}</span>{{ end }}
+              {{ if or .kind .roles }}
+                <span class="tl-tags">
+                  {{ with .kind }}<span class="tl-tag">{{ . }}</span>{{ end }}
+                  {{ range .roles }}<span class="tl-tag is-role">{{ . }}</span>{{ end }}
+                </span>
+              {{ end }}
+            </div>
+          </li>
+        {{ end }}
+      </ol>
+    {{ end }}
+
+    {{/* ---------------- Teaching ---------------- */}}
+    {{ with .Params.teaching }}
+      <h2>Teaching Assistant</h2>
+      <div class="teach">
+        {{ range . }}
+          <section class="teach-year">
+            <h3 class="teach-y">{{ .year }}</h3>
+            <ul class="teach-list">
+              {{ range .items }}
+                <li>
+                  <span class="teach-course">{{ .course }}</span>
+                  <span class="teach-place">{{ .place }}</span>
+                </li>
+              {{ end }}
+            </ul>
+          </section>
+        {{ end }}
+      </div>
+    {{ end }}
+  </div>
+</article>
+{{ end }}

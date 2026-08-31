@@ -1,4 +1,4 @@
-baseURL = 'https://raghavendranest.github.io/'
+baseURL = 'https://raghavendra12345.github.io/'
 languageCode = 'en-us'
 title = 'Raghavendra N Vernekar'
 theme = 'PaperMod'
@@ -51,6 +51,7 @@ summaryLength = 40
   # Must appear before any [params.*] sub-table or TOML scopes it wrongly.
   authorName = 'Raghavendra N Vernekar'
   env = 'production'
+  mainSections = ['posts']
   description = 'Research scholar in cryptography at CSA, IISc Bengaluru.'
   author = 'Raghavendra N Vernekar'
   DateFormat = '2 January 2006'
@@ -63,7 +64,7 @@ summaryLength = 40
   ShowBreadCrumbs = true
   ShowCodeCopyButtons = true
   ShowWordCount = false
-  ShowRssButtonInSectionTermList = true
+  ShowRssButtonInSectionTermList = false
   ShowToc = true
   TocOpen = false
   disableSpecial1stPost = true
@@ -72,11 +73,15 @@ summaryLength = 40
 
   [[params.socialIcons]]
     name = 'github'
-    url = 'https://github.com/raghavendranest'
+    url = 'https://github.com/raghavendra12345'
   [[params.socialIcons]]
     name = 'linkedin'
     url = 'https://www.linkedin.com/in/raghavendra-v-427849136/'
-  
+
+  # Resume button on the home page. Leave url empty to hide the button.
+  [params.resume]
+    url   = 'https://drive.google.com/file/d/REPLACE_WITH_YOUR_FILE_ID/view?usp=sharing'
+    label = 'Download resume'
 
   [params.contact]
     email        = 'Rnsvernekar@gmail.com'
@@ -85,7 +90,7 @@ summaryLength = 40
     linkedin     = 'https://www.linkedin.com/in/raghavendra-v-427849136/'
     website      = 'https://sites.google.com/view/raghavendranv/home'
     websiteLabel = 'Google Sites page'
-    web3formsKey = 'd73111bb-8d67-4f12-bcdb-cb21f9c02ce8'          # paste your Web3Forms access key here
+    web3formsKey = ''          # paste your Web3Forms access key here
 
   [params.likes]
     backend = 'local'          # 'local' or 'supabase'
@@ -104,28 +109,44 @@ summaryLength = 40
   name = 'Posts'
   url = '/posts/'
   weight = 10
+
+# A parent with no `url` becomes a dropdown. Its children carry
+# `parent = 'research'` and appear underneath it.
+[[menu.main]]
+  identifier = 'research'
+  name = 'Research'
+  weight = 20
 [[menu.main]]
   identifier = 'publications'
+  parent = 'research'
   name = 'Publications'
   url = '/publications/'
-  weight = 15
+  weight = 21
+[[menu.main]]
+  identifier = 'topics'
+  parent = 'research'
+  name = 'Topics'
+  url = '/topics/'
+  weight = 22
+[[menu.main]]
+  identifier = 'activities'
+  parent = 'research'
+  name = 'Activities'
+  url = '/activities/'
+  weight = 23
+
 [[menu.main]]
   identifier = 'gallery'
   name = 'Photos'
   url = '/gallery/'
-  weight = 20
-[[menu.main]]
-  identifier = 'topics'
-  name = 'Topics'
-  url = '/topics/'
   weight = 30
 [[menu.main]]
   identifier = 'contact'
   name = 'Contact'
   url = '/contact/'
-  weight = 35
+  weight = 40
 [[menu.main]]
   identifier = 'search'
   name = 'Search'
   url = '/search/'
-  weight = 40
+  weight = 50

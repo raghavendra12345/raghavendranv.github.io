@@ -1,0 +1,48 @@
+{{/*
+  Personal bio block for the home page.
+
+  Usage in content/_index.md:
+
+    {{< bio
+        image="images/profile.jpg"
+        name="Raghavendra N Vernekar"
+        role="Research Scholar, CSA, IISc Bengaluru" >}}
+    Your paragraphs here. Markdown works, including [links](https://example.com).
+    {{< /bio >}}
+
+  `image` is relative to the static/ folder. Omit it and the block renders
+  as text only, so the page never breaks while you're finding a photo.
+*/}}
+<div class="bio">
+  {{ with .Get "image" }}
+    <div class="bio-photo">
+      <img src="{{ . | relURL }}"
+           alt="{{ $.Get `name` | default `Profile photo` }}"
+           loading="eager"
+           width="180" height="180">
+    </div>
+  {{ end }}
+
+  <div class="bio-body">
+    {{ with .Get "name" }}<h1 class="bio-name">{{ . }}</h1>{{ end }}
+    {{ with .Get "role" }}<p class="bio-role">{{ . | markdownify }}</p>{{ end }}
+    {{ .Inner | .Page.RenderString (dict "display" "block") }}
+    {{ with site.Params.resume.url }}
+      <p class="bio-actions">
+        <a class="btn-download" href="{{ . }}" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <path d="M7 10l5 5 5-5"></path>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          {{ site.Params.resume.label | default "Download resume" }}
+        </a>
+      </p>
+    {{ end }}
+
+    <div class="bio-links">
+      {{ partial "social_icons.html" (dict "align" "left") }}
+    </div>
+  </div>
+</div>

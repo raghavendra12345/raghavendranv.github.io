@@ -1,0 +1,140 @@
+{{- /*
+  Override of PaperMod's header. Two additions:
+    1. Nested menus. Give a menu entry `parent = 'identifier'` in hugo.toml
+       and it becomes a dropdown item instead of a top-level link.
+    2. Any entry with identifier 'search' renders as a magnifier icon
+       rather than the word.
+  Everything else (logo, theme toggle) is PaperMod's, unchanged.
+*/ -}}
+<header class="header">
+  <nav class="header-nav">
+    <div class="logo">
+      {{- $label_text := (site.Params.label.text | default site.Title) }}
+      {{- if site.Title }}
+      <a href="{{ "" | absLangURL }}" accesskey="h" title="{{ $label_text }} (Alt + H)">
+        {{- $label_text -}}
+      </a>
+      {{- end }}
+
+      {{- if (not site.Params.disableThemeToggle) }}
+      <div class="logo-switches">
+        <button id="theme-toggle" class="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+          <svg class="moon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <svg class="sun" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+      </div>
+      {{- end }}
+    </div>
+
+    {{- $currentPage := . }}
+    {{- $pageURL := $currentPage.Permalink | absLangURL }}
+
+    <ul id="menu" class="menu">
+      {{- range site.Menus.main }}
+        {{- $isSearch := eq .Identifier "search" }}
+        {{- $itemURL := "" }}
+        {{- with .URL }}{{ $itemURL = (cond (strings.HasSuffix . "/") . (printf "%s/" .)) | absLangURL }}{{ end }}
+
+        {{- if .HasChildren }}
+          {{/* Is any child the current page? If so the parent shows as active. */}}
+          {{- $childActive := false }}
+          {{- range .Children }}
+            {{- with .URL }}
+              {{- if eq ((cond (strings.HasSuffix . "/") . (printf "%s/" .)) | absLangURL) $pageURL }}
+                {{- $childActive = true }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
+          <li class="has-sub">
+            <button type="button" class="sub-toggle" aria-expanded="false" aria-haspopup="true">
+              <span {{ if $childActive }}class="active"{{ end }}>{{ .Name }}</span>
+              <svg class="caret" viewBox="0 0 24 24" width="10" height="10" fill="none"
+                   stroke="currentColor" stroke-width="3" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <path d="M6 9l6 6 6-6"></path>
+              </svg>
+            </button>
+            <ul class="submenu">
+              {{- range .Children }}
+                {{- $curl := (cond (strings.HasSuffix .URL "/") .URL (printf "%s/" .URL)) | absLangURL }}
+                <li>
+                  <a href="{{ .URL | absLangURL }}">
+                    <span {{ if eq $curl $pageURL }}class="active"{{ end }}>{{ .Name }}</span>
+                  </a>
+                </li>
+              {{- end }}
+            </ul>
+          </li>
+
+        {{- else if .Parent }}
+          {{/* Rendered inside its parent above; skip here. */}}
+
+        {{- else }}
+          <li{{ if $isSearch }} class="nav-search"{{ end }}>
+            <a href="{{ .URL | absLangURL }}"
+               title="{{ .Title | default .Name }}{{ if $isSearch }} (Alt + /){{ end }}"
+               {{- if $isSearch }} accesskey="/" aria-label="Search"{{ end }}>
+              {{- if $isSearch }}
+                <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7"></circle>
+                  <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+                </svg>
+              {{- else }}
+                <span {{- if eq $itemURL $pageURL }} class="active" {{- end }}>
+                  {{- .Pre }}{{ .Name -}}{{ .Post -}}
+                </span>
+              {{- end }}
+            </a>
+          </li>
+        {{- end }}
+      {{- end }}
+    </ul>
+  </nav>
+</header>
+
+<script>
+/* Dropdowns open on click as well as hover, so they work on touch screens
+   where there is no hover state at all. */
+(function () {
+  var toggles = document.querySelectorAll('.sub-toggle');
+
+  function closeAll(except) {
+    toggles.forEach(function (t) {
+      if (t !== except) {
+        t.setAttribute('aria-expanded', 'false');
+        t.parentElement.classList.remove('is-open');
+      }
+    });
+  }
+
+  toggles.forEach(function (t) {
+    t.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var open = t.getAttribute('aria-expanded') === 'true';
+      closeAll(t);
+      t.setAttribute('aria-expanded', open ? 'false' : 'true');
+      t.parentElement.classList.toggle('is-open', !open);
+    });
+  });
+
+  document.addEventListener('click', function () { closeAll(null); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeAll(null);
+  });
+})();
+</script>
