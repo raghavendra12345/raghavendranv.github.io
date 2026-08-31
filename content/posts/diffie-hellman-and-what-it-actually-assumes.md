@@ -3,7 +3,7 @@ title: "Diffie–Hellman and What It Actually Assumes"
 date: 2026-08-24
 draft: false
 math: true
-tags: ["discrete-log", "key-exchange", "provable-security"]
+tags: ["basic-cryptography", "discrete-log", "key-exchange"]
 description: "The protocol is four lines. The assumption underneath it is the interesting part, and it is strictly stronger than 'discrete log is hard'."
 ShowToc: true
 TocOpen: false
