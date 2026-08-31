@@ -76,9 +76,7 @@ summaryLength = 40
   [[params.socialIcons]]
     name = 'linkedin'
     url = 'https://www.linkedin.com/in/raghavendra-v-427849136/'
-  [[params.socialIcons]]
-    name = 'rss'
-    url = 'index.xml'
+  
 
   [params.contact]
     email        = 'Rnsvernekar@gmail.com'
@@ -87,7 +85,7 @@ summaryLength = 40
     linkedin     = 'https://www.linkedin.com/in/raghavendra-v-427849136/'
     website      = 'https://sites.google.com/view/raghavendranv/home'
     websiteLabel = 'Google Sites page'
-    web3formsKey = ''          # paste your Web3Forms access key here
+    web3formsKey = 'd73111bb-8d67-4f12-bcdb-cb21f9c02ce8'          # paste your Web3Forms access key here
 
   [params.likes]
     backend = 'local'          # 'local' or 'supabase'
