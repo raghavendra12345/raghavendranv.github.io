@@ -1,4 +1,4 @@
-baseURL = 'https://raghavendra12345.github.io/'
+baseURL = 'https://raghavendranest.github.io/'
 languageCode = 'en-us'
 title = 'Raghavendra N Vernekar'
 theme = 'PaperMod'
@@ -72,7 +72,7 @@ summaryLength = 40
 
   [[params.socialIcons]]
     name = 'github'
-    url = 'https://github.com/raghavendra12345'
+    url = 'https://github.com/raghavendranest'
   [[params.socialIcons]]
     name = 'linkedin'
     url = 'https://www.linkedin.com/in/raghavendra-v-427849136/'
