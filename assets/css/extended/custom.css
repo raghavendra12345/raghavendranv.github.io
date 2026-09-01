@@ -996,3 +996,34 @@ button:focus-visible,
    have one, and it is inside .post-content on the home page. */
 .post-content .btn-download,
 .btn-download { border-bottom: none !important; text-decoration: none !important; }
+
+/* -------------------------------------------------------------
+   END-OF-POST NOTICE
+   Deliberately quiet: a dashed border rather than a coloured
+   panel, so it reads as an aside and never competes with the
+   mathematics for attention.
+   ------------------------------------------------------------- */
+
+.post-notice {
+  display: flex;
+  gap: 0.75em;
+  align-items: flex-start;
+  max-width: var(--main-width);
+  margin: 2.5em auto 0;
+  padding: 0.9em 1.1em;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--pat-muted);
+}
+
+.post-notice svg { flex: 0 0 17px; margin-top: 0.2em; color: var(--pat-verdigris); }
+
+.post-notice strong { color: var(--primary); font-weight: 600; }
+
+.post-notice p { margin: 0; display: inline; }
+
+.post-notice a { color: var(--pat-verdigris); border-bottom: 1px solid var(--pat-rule); }
+
+.post-notice a:hover { border-bottom-color: var(--pat-verdigris); }

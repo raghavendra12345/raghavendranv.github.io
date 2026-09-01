@@ -78,6 +78,13 @@ summaryLength = 40
     name = 'linkedin'
     url = 'https://www.linkedin.com/in/raghavendra-v-427849136/'
 
+  # Notice shown at the end of every post. Set enable = false to switch off,
+  # or add `notice: false` to a single post's front matter.
+  [params.postNotice]
+    enable = true
+    title  = 'Work in progress.'
+    text   = 'These notes are still being written and may contain errors. Please verify anything you rely on, and [tell me](/contact/) if you spot a mistake.'
+
   # Resume button on the home page. Leave url empty to hide the button.
   [params.resume]
     url   = 'https://drive.google.com/file/d/REPLACE_WITH_YOUR_FILE_ID/view?usp=sharing'

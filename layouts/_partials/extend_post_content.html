@@ -1,0 +1,35 @@
+{{- /*
+  Renders a notice at the end of every post, just below the body.
+
+  PaperMod calls this partial from single.html specifically as an extension
+  point, so nothing in the theme needs overriding.
+
+  Configure in hugo.toml:
+
+      [params.postNotice]
+        enable = true
+        title  = 'Work in progress'
+        text   = 'These notes are under construction...'
+
+  Applies to posts only, so pages like Contact and Publications stay clean.
+
+  To hide it on one finished post, add to that post's front matter:
+
+      notice: false
+*/ -}}
+
+{{- $n := site.Params.postNotice }}
+{{- if and $n $n.enable (eq .Section "posts") (ne .Params.notice false) }}
+<aside class="post-notice">
+  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
+       stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+    <line x1="12" y1="9" x2="12" y2="13"/>
+    <line x1="12" y1="17" x2="12.01" y2="17"/>
+  </svg>
+  <div>
+    {{- with $n.title }}<strong>{{ . }}</strong>{{ end }}
+    {{ with $n.text }}{{ . | markdownify }}{{ end }}
+  </div>
+</aside>
+{{- end }}

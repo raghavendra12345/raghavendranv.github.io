@@ -1,0 +1,72 @@
+{{- /*
+  Next / previous post links.
+
+  By default these follow date order within your main sections, exactly as
+  PaperMod does. To choose them yourself, add either or both of these to a
+  post's front matter:
+
+      nav_prev: "/posts/some-earlier-post/"
+      nav_next: "/posts/some-later-post/"
+
+  Paths are site-relative, with leading and trailing slashes. Setting one
+  does not affect the other, so you can pin just the "next" in a series and
+  let "prev" fall back to the date order.
+
+  To hide a link entirely on one post, set it to "none":
+
+      nav_next: "none"
+*/ -}}
+
+{{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
+
+{{- /* Older post: explicit override, or the date-order neighbour. */ -}}
+{{- $prevPage := $pages.Next . }}
+{{- $prevOff := false }}
+{{- with .Params.nav_prev }}
+  {{- if eq . "none" }}
+    {{- $prevOff = true }}
+  {{- else }}
+    {{- $found := site.GetPage . }}
+    {{- if $found }}
+      {{- $prevPage = $found }}
+    {{- else }}
+      {{- warnf "post_nav_links: nav_prev %q on %q matched no page" . $.File.Path }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- /* Newer post. */ -}}
+{{- $nextPage := $pages.Prev . }}
+{{- $nextOff := false }}
+{{- with .Params.nav_next }}
+  {{- if eq . "none" }}
+    {{- $nextOff = true }}
+  {{- else }}
+    {{- $found := site.GetPage . }}
+    {{- if $found }}
+      {{- $nextPage = $found }}
+    {{- else }}
+      {{- warnf "post_nav_links: nav_next %q on %q matched no page" . $.File.Path }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- if $prevOff }}{{ $prevPage = false }}{{ end }}
+{{- if $nextOff }}{{ $nextPage = false }}{{ end }}
+
+{{- if or $prevPage $nextPage }}
+<nav class="paginav">
+  {{- with $prevPage }}
+  <a class="prev" href="{{ .Permalink }}">
+    <span class="title">« {{ i18n "prev_page" }}</span>
+    <span>{{- .Title | default .Name -}}</span>
+  </a>
+  {{- end }}
+  {{- with $nextPage }}
+  <a class="next" href="{{ .Permalink }}">
+    <span class="title">{{ i18n "next_page" }} »</span>
+    <span>{{- .Title | default .Name -}}</span>
+  </a>
+  {{- end }}
+</nav>
+{{- end }}
